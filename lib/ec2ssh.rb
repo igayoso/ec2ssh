@@ -29,10 +29,14 @@ module Ec2ssh
           n = n + 1
 	end
       end
-      template = @config[:template] || "ssh #{Etc.getlogin}@<instance>"
-      selected_host = ask("Host?  ", Integer) { |q| q.in = 0..hostnames.count }
-      command = template.gsub("<instance>",hostnames[selected_host])
-      exec(command)
+      if n = 0
+        puts "No hosts found" 
+      else
+        template = @config[:template] || "ssh #{Etc.getlogin}@<instance>"
+        selected_host = ask("Host?  ", Integer) { |q| q.in = 0..hostnames.count }
+        command = template.gsub("<instance>",hostnames[selected_host])
+        exec(command)
+      end
     end
 
     private
